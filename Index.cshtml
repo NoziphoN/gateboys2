@@ -1,0 +1,376 @@
+﻿@model IEnumerable<GateBoys.Models.TrackOrder>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<ul class="nav nav-tabs">
+
+    @if (Request.IsAuthenticated)
+    {
+    }
+    <li class="active"><a data-toggle="tab" href="#prep">Preapare </a></li>
+    <li><a data-toggle="tab" href="#ware">In Warehouse </a></li>
+    <li><a data-toggle="tab" href="#collect">For Collection </a></li>
+    <li><a data-toggle="tab" href="#deliver">For Delivery </a></li>
+    <li><a data-toggle="tab" href="#collected">Collected </a></li>
+    <li><a data-toggle="tab" href="#completed">Delivered </a></li>
+
+
+
+</ul>
+<div class="tab-content">
+    <div id="prep" class="tab-pane fade in active">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.IsDeliver == false
+                    && a.InTransit == false && a.InWarehouse == false && a.PreparingParcel == false
+                    && a.driverNames == null))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Send To Warehouse", "prepDone", new { id = item.TrackId })
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+    <div id="ware" class="tab-pane fade in">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreparingParcel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.IsDeliver == false
+                    && a.InTransit == false && a.InWarehouse == false && a.PreparingParcel == true
+                    && a.driverNames == null))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreparingParcel)
+                            @Html.DisplayFor(modelItem => item.PrepParcelDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Parcel Ready", "inWare", new { id = item.TrackId })
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+    <div id="collect" class="tab-pane fade in">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreparingParcel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InWarehouse)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.delColect != "Deliver" && a.IsDeliver == false
+                    && a.InTransit == false && a.InWarehouse == true && a.PreparingParcel == true
+                    && a.driverNames == null))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreparingParcel)
+                            @Html.DisplayFor(modelItem => item.PrepParcelDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InWarehouse)
+                            @Html.DisplayFor(modelItem => item.InWarehsDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Notify User", "notify", new { id = item.TrackId })|
+                            @Html.ActionLink("Collection", "MarkComplete", new { id = item.TrackId })
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+    <div id="deliver" class="tab-pane fade in">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreparingParcel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InWarehouse)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.delColect == "Deliver" && a.IsDeliver == false
+                    && a.InTransit == false && a.InWarehouse == true && a.PreparingParcel == true
+                    && a.driverNames == null))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreparingParcel)
+                            @Html.DisplayFor(modelItem => item.PrepParcelDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InWarehouse)
+                            @Html.DisplayFor(modelItem => item.InWarehsDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Assign driver", "assign", new { id = item.TrackId })
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+    <div id="collected" class="tab-pane fade in">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreparingParcel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InWarehouse)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsReady)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.IsReady == true && a.pin == a.comparePin
+                            && a.delColect != "Deliver"))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreparingParcel)
+                            @Html.DisplayFor(modelItem => item.PrepParcelDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InWarehouse)
+                            @Html.DisplayFor(modelItem => item.InWarehsDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsReady)
+                            @Html.DisplayFor(modelItem => item.IsReadyDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsDeliver)
+                            @Html.DisplayFor(modelItem => item.IsDeliverDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+    <div id="completed" class="tab-pane fade in">
+        <table class="timetable_sub">
+            <thead>
+
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrderPlaced)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreparingParcel)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InWarehouse)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InTransit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsDeliver)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserMail)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Where(a => a.IsDeliver == true && a.pin == a.comparePin
+                        && a.delColect == "Deliver"))
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderPlaced)
+                            @Html.DisplayFor(modelItem => item.OrderPlacedDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreparingParcel)
+                            @Html.DisplayFor(modelItem => item.PrepParcelDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InWarehouse)
+                            @Html.DisplayFor(modelItem => item.InWarehsDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InTransit)
+                            @Html.DisplayFor(modelItem => item.InTransitDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsDeliver)
+                            @Html.DisplayFor(modelItem => item.IsDeliverDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserMail)
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+</div>

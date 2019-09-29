@@ -1,0 +1,75 @@
+﻿@model GateBoys.Models.TrackOrder
+
+@{
+    ViewBag.Title = "MarkComplete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+
+        <div class="col-md-7 col-md-offset-2 col-sm-6 col-xs-12">
+            <div class="panel panel-default formPart">
+                <div class="panel-heading patternbg">
+                    Delivered <span> Order</span>Details<span class="glyphicon glyphicon-edit"></span>
+                </div>
+                <div class="panel-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.TrackId)
+                    @Html.HiddenFor(model => model.OrderNumber)
+                    @Html.HiddenFor(model => model.OrderPlaced)
+                    @Html.HiddenFor(model => model.OrderPlacedDate)
+                    @Html.HiddenFor(model => model.PreparingParcel)
+                    @Html.HiddenFor(model => model.PrepParcelDate)
+                    @Html.HiddenFor(model => model.InWarehouse)
+                    @Html.HiddenFor(model => model.InWarehsDate)
+                    @Html.HiddenFor(model => model.IsReady)
+                    @Html.HiddenFor(model => model.IsReadyDate)
+                    @Html.HiddenFor(model => model.InTransit)
+                    @Html.HiddenFor(model => model.InTransitDate)
+                    @Html.HiddenFor(model => model.UserMail)
+                    @Html.HiddenFor(model => model.delColect)
+                    @Html.HiddenFor(model => model.colIdNum)
+                    @Html.HiddenFor(model => model.pin)
+                    @Html.HiddenFor(model => model.driverId)
+                    @Html.HiddenFor(model => model.driverNames)
+
+
+                    <div class="form-group">
+                        <h5>Order Number</h5>
+                        @Html.EditorFor(model => model.OrderNumber, new { htmlAttributes = new { @class = "form-control", @disabled = true } })
+                        @Html.ValidationMessageFor(model => model.OrderNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <h5>Date Placed</h5>
+                        @Html.EditorFor(model => model.OrderPlacedDate, new { htmlAttributes = new { @class = "form-control", @disabled = true } })
+                        @Html.ValidationMessageFor(model => model.OrderPlacedDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <h5>Id Number</h5>
+                        @Html.EditorFor(model => model.idCompareNum, new { htmlAttributes = new { @class = "form-control", @required = "true", type = "number", placeholder = "Id Number" } })
+                        @Html.ValidationMessageFor(model => model.idCompareNum, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <h5>Collection Pin</h5>
+                        @Html.EditorFor(model => model.comparePin, new { htmlAttributes = new { @class = "form-control", @required = "true", type = "password", maxlength = 5, minlength = 5, placeholder = "-----" } })
+                        @Html.ValidationMessageFor(model => model.comparePin, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
